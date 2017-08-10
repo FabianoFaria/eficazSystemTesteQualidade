@@ -317,7 +317,83 @@
         */
 
 
-    }else{
+    }
+    elseif($_GET['agradecimento']) {
+        ?>
+        <html>
+            <head>
+                <meta charset="utf-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+
+                <title>Eficaz System - Formulário de qualidade de atendimento</title>
+
+                <meta name="description" content="">
+                <meta name="author" content="">
+                <link rel="icon" href="../imagens/favicon2.ico">
+
+                <!-- Bootstrap core CSS -->
+                <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+                <!-- Jquery file -->
+                <script src="../js/jquery.js"></script>
+                <script src="../js/bootstrap.min.js"></script>
+
+                <style>
+                    /* Sticky footer styles
+                    -------------------------------------------------- */
+                    html {
+                    position: relative;
+                    min-height: 100%;
+                    }
+                    body {
+                    /* Margin bottom by footer height */
+                    margin-bottom: 60px;
+                    }
+                    .footer {
+                    position: absolute;
+                    bottom: 0;
+                    width: 100%;
+                    /* Set the fixed height of the footer here */
+                    height: 60px;
+                    background-color: #f5f5f5;
+                    }
+
+
+                    /* Custom page CSS
+                    -------------------------------------------------- */
+                    /* Not required for template or sticky footer method. */
+
+                    .container {
+                    width: auto;
+                    max-width: 680px;
+                    padding: 0 15px;
+                    }
+                    .container .text-muted {
+                    margin: 20px 0;
+                    }
+                </style>
+            </head>
+            <body>
+                <!-- Begin page content -->
+               <div class="container">
+                 <div class="page-header">
+                   <a href="#"><img src="imagens/logo-eficaz-system_small.png" class="img-responsive"></a>
+                 </div>
+                 <p class="lead">Agradecemos sua contribuição.</p>
+                 <p>A avaliação que você respondeu, irá ajudar a Eficaz System a melhorar nosso atendimento e nossos serviços.</p>
+               </div>
+
+               <footer class="footer">
+                 <div class="container">
+                    <p class="">© <?php echo date('Y'); ?> Eficaz system - Sistema de avaliação de qualidade.</p>
+                 </div>
+               </footer>
+            </body>
+        </html>
+        <?php
+    }
+    else{
         //CASO USUÁRIO TENHA CHEGADO AQUI POR ACASO
 
         // Configura a url do login

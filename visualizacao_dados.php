@@ -1,14 +1,14 @@
 <?php
 
     // Display erros
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+    // error_reporting(E_ALL);
+    // ini_set('display_errors', 1);
 
     // session_start inicia a sessão
     session_start();
 
     // Verifica se esta na sessao
-    if (!isset($_SESSION['userdata']))
+    if(empty($_SESSION['userdata']))
     {
         // Apaga qualquer valor
         $_SESSION['userdata'] = array();
@@ -35,9 +35,13 @@
 
     }else{
 
+        $page = 'Vizualizar';
+
+        include 'menu_inicial.php';
+
         ?>
 
-            <html>
+            <!-- <html>
                 <head>
 
                     <meta charset="utf-8">
@@ -48,14 +52,14 @@
 
                     <meta name="description" content="">
                     <meta name="author" content="">
-                    <link rel="icon" href="../imagens/favicon2.ico">
+                    <link rel="icon" href="../imagens/favicon2.ico"> -->
 
                     <!-- Bootstrap core CSS -->
-                    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<!--                     <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
                     <link href="../css/sweetalert.css" rel="stylesheet" type="text/css">
-
+ -->
                     <!-- Custom styles for this template -->
-                    <link href="../css/master.css" rel="stylesheet" type="text/css">
+                    <!-- <link href="../css/master.css" rel="stylesheet" type="text/css">
                     <link href="../css/metisMenu.css" rel="stylesheet" type="text/css">
                     <link href="../css/sb-admin-2.css" rel="stylesheet" type="text/css">
                     <link href="../css/wickedpicker.min.css" rel="stylesheet" type="text/css">
@@ -63,9 +67,9 @@
 
                     <link href="../css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
                     <link href="../css/sweetalert.css" rel="stylesheet" type="text/css">
-
+ -->
                     <!-- Jquery file -->
-                    <script src="../js/jquery.js"></script>
+                   <!--  <script src="../js/jquery.js"></script>
                     <script src="../js/jquery-ui.js"></script>
                     <script src="../js/jquery.flot.js"></script>
                     <script src="../js/jquery.flot.categories.js"></script>
@@ -80,20 +84,20 @@
 
 
                 </head>
-                <body>
+                <body> -->
 
-                    <div class="container">
+                    <!-- <div class="container">
                         <div class="header clearfix">
                             <nav>
                               <ul class="nav nav-pills pull-right">
                                 <li role="presentation" ><a href="index.php">Enviar avaliação</a></li>
                                 <li role="presentation" class="active"><a href="javascript:void(0)">Vizualizar dados</a></li>
-                                <!--<li role="presentation"><a href="#">Contact</a></li> -->
+                                <li role="presentation"><a href="javascript:void(0)" id="saida">Sair</a></li>
                               </ul>
-                            </nav>
+                            </nav> -->
                             <!-- <h3 class="text-muted">Eficaz System - Questionario de qualidade</h3> -->
-                             <a href="#"><img src="imagens/logo-eficaz-system_small.png" class="img-responsive"></a>
-                        </div>
+                             <!-- <a href="#"><img src="imagens/logo-eficaz-system_small.png" class="img-responsive"></a>
+                        </div> -->
 
                         <div class="row">
                             <div class="col-md-5">
@@ -151,6 +155,59 @@
 
                             </div>
 
+                            <div class="col-md-5">
+                                <div class="panel panel-green">
+                                    <div class="panel-heading">Exportar relatôrio</div>
+                                    <div class="panel-body">
+                                        <form id="formPeriodoExportar" class="">
+
+                                            <div class="row borda-01">
+                                                <div class="col-md-12 txt-center">
+                                                    <label class="font-texto-02">Período</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row borda-01">
+                                                <div class="col-md-6">
+                                                    <label class="font-texto-02">Desde : </label>
+                                                </div>
+
+                                                <div class="col-md-6 txt-center">
+                                                    <label class="font-texto-02">
+                                                        <input class="form-control" type="text" id="data_inicio_csv" name="data_inicio_csv" val="">
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="font-texto-02">Até :</label>
+                                                </div>
+
+                                                <div class="col-md-6 txt-center">
+                                                    <label class="font-texto-02">
+                                                        <input class="form-control" type="text" id="data_fim_csv" name="data_fim_csv" val="">
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="font-texto-02"></label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <a href="javascript:void(0)" class="btn btn-primary" id="exportarPeriodo" >
+                                                    Exportar .CSV
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="row">
@@ -160,6 +217,7 @@
                                 //Busca os dados da última semana.
 
                                 require_once "classes/conexao.php";
+                                require_once "classes/funcoes_uteis.php";
 
                                 $conn = new BancoDeDados;
 
@@ -179,16 +237,15 @@
 
                                 //var_dump($clientesDados);
 
-                                // Função de porcentagem: Quanto é X% de N?
-                                function porcentagem_xn( $parcial, $total ) {
-                                    return ( $parcial * 100 ) / $total;
-                                }
-
                             ?>
 
                             <div class="panel panel-info">
                                 <div class="panel-heading">
-                                    <i class="fa fa-file-text-o fa-x4"></i>Dados do período <span id="dataInicio"><?php echo $dataLabelIni; ?></span> até <span id="dataFinal"><?php echo $dataLabelFini; ?></span>
+                                    <h3>
+                                        <i class="fa fa-file-text-o fa-x4"></i>
+                                        Dados do período <span id="dataInicio"><?php echo $dataLabelIni; ?></span> até <span id="dataFinal"><?php echo $dataLabelFini; ?></span>
+                                    </h3>
+
                                 </div>
                             </div>
                             <div class="panel-body">
@@ -407,14 +464,6 @@
                                                         }
                                                     }
 
-                                                    // echo "<br />";
-                                                    // print_r($identificacaoA);
-                                                    // echo "<br />";
-                                                    // print_r($identificacaoB);
-                                                    // echo "<br />";
-                                                    // print_r($identificacaoC);
-                                                    // echo "<br />";
-                                                    // print_r($identificacaoD);
 
                                                 ?>
                                                 <table class="table table-striped table-bordered table-hover">
@@ -425,7 +474,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="identificar_tecnicoA">
                                                                 <?php echo porcentagem_xn($identificacaoA, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -437,19 +486,19 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="identificar_tecnicoB">
                                                                 <?php echo porcentagem_xn($identificacaoB, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <p>
+                                                            <p id="identificar_tecnicoC">
                                                                 <i class="fa fa-meh-o fa-1x"></i> Difícil identificação
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="identificar_tecnicoD">
                                                                 <?php echo porcentagem_xn($identificacaoC, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -494,7 +543,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="aparencia_tecnicoA">
                                                                 <?php echo porcentagem_xn($aparenciaA, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -506,7 +555,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="aparencia_tecnicoB">
                                                                 <?php echo porcentagem_xn($aparenciaB, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -518,7 +567,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="aparencia_tecnicoC">
                                                                 <?php echo porcentagem_xn($aparenciaC, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -530,7 +579,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="aparencia_tecnicoD">
                                                                 <?php echo porcentagem_xn($aparenciaD, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -560,7 +609,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="cordialidadeA">
                                                                 <?php echo porcentagem_xn($cordialidadeA, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -572,7 +621,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="cordialidadeB">
                                                                 <?php echo porcentagem_xn($cordialidadeB, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -584,7 +633,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="cordialidadeC">
                                                                 <?php echo porcentagem_xn($cordialidadeC, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -596,7 +645,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="cordialidadeD">
                                                                 <?php echo porcentagem_xn($cordialidadeD, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -628,7 +677,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="tempo_servicoA">
                                                                 <?php echo porcentagem_xn($tempoA, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -640,7 +689,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="tempo_servicoB">
                                                                 <?php echo porcentagem_xn($tempoB, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -652,7 +701,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="tempo_servicoC">
                                                                 <?php echo porcentagem_xn($tempoC, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -664,7 +713,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="tempo_servicoD">
                                                                 <?php echo porcentagem_xn($tempoD, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -694,7 +743,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="agravanteA">
                                                                 <?php echo porcentagem_xn($agravanteA, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -706,7 +755,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="agravanteB">
                                                                 <?php echo porcentagem_xn($agravanteB, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -718,7 +767,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="agravanteC">
                                                                 <?php echo porcentagem_xn($agravanteC, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -730,7 +779,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="agravanteD">
                                                                 <?php echo porcentagem_xn($agravanteD, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -760,7 +809,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="expectativaA">
                                                                 <?php echo porcentagem_xn($expectativaA, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -772,7 +821,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="expectativaB">
                                                                 <?php echo porcentagem_xn($expectativaB, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -784,7 +833,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="expectativaC">
                                                                 <?php echo porcentagem_xn($expectativaC, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -796,7 +845,7 @@
                                                             </p>
                                                         </td>
                                                         <td>
-                                                            <p>
+                                                            <p id="expectativaD">
                                                                 <?php echo porcentagem_xn($expectativaD, $totalRespostas); ?>%
                                                             </p>
                                                         </td>
@@ -818,7 +867,7 @@
                             <div class="panel panel-info">
                                 <div class="panel-heading">
 
-                                    <i class="fa fa-star-o fa-fw"></i>Notas dos clientes
+                                    <h3><i class="fa fa-star-o fa-1x"></i> Quantidade de pessoas por nota</h3>
 
                                 </div>
                                 <div class="panel-body">
@@ -830,11 +879,27 @@
 
                         </div>
 
-                        <footer class="footer">
-                            <p class="">© <?php echo date('Y'); ?> Eficaz system - Sistema de avaliação de qualidade.</p>
+                       <!--  <footer class="footer">
+                            <p class="">© <?php //echo date('Y'); ?> Eficaz system - Sistema de avaliação de qualidade.</p>
                         </footer>
 
-                    </div>
+                    </div> -->
+
+                    <!-- modal de login -->
+                    <div id="modalDados" class="modal fade" tabindex="-1" role="dialog" style="top:25%;">
+                      <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+
+                          <div class="modal-body">
+                            <p style="text-align: center;">
+                                <i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>
+                            </p>
+                            <p id="mensagemModal"></p>
+                          </div>
+                        </div><!-- /.modal-content -->
+                      </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+
 
                     <script language='javascript'>
                         var options = {
@@ -848,8 +913,13 @@
                             dateFormat: "dd/mm/yy"
                         }
 
+                        // Relatório por período
                         $("#data_inicio_rel").datepicker(options);
                         $("#data_fim_rel").datepicker(options);
+
+                        // Período para exportar
+                        $("#data_inicio_csv").datepicker(options);
+                        $("#data_fim_csv").datepicker(options);
 
                         //Efetua a montagem do gráfico
 
@@ -878,8 +948,13 @@
                     			},
                     			xaxis: {
                     				mode: "categories",
-                    				tickLength: 0
-                    			}
+                    				tickLength: 1
+                    			},
+                                yaxis: {
+                                    minTickSize: 1,
+                                    tickDecimals: 0
+
+                                }
                     		});
 
                     		// Add the Flot version string to the footer
@@ -888,11 +963,12 @@
                     	});
 
                     </script>
-                </body>
+                <!-- </body>
             </html>
-
+ -->
         <?php
 
+        include 'footer.php';
         //echo "Teste de validação dos dados!!";
 
     }

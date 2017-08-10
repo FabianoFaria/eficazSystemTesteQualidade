@@ -316,15 +316,15 @@ class email
                                                             $mensagem .= '</td>';
                                                         $mensagem .= '</tr>';
 
-                                                    $mensagem .= '</table';
+                                                    $mensagem .= '</table>';
                                                 $mensagem .= '</td>';
                                             $mensagem .= '</tr>';
 
-                                        $mensagem .= '</table';
+                                        $mensagem .= '</table>';
                                     $mensagem .= '</td>';
                                 $mensagem .= '</tr>';
 
-                            $mensagem .= '</table';
+                            $mensagem .= '</table>';
 
                         $mensagem .= '';
 
@@ -333,7 +333,7 @@ class email
 
                 $mensagem .= '</table>';
 
-            $mensagem .= '</center';
+            $mensagem .= '</center>';
 
         $mensagem .= "</body>";
 

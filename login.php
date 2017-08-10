@@ -1,5 +1,8 @@
 <?php
 
+    // session_start inicia a sessão
+    session_start();
+
     // Verifica se esta na sessao
     if (!isset($_SESSION['userdata']) || empty ($_SESSION['userdata']))
     {
@@ -20,9 +23,10 @@
 
             <link href="../css/login.css" rel="stylesheet" type="text/css">
             <link href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
+             <link href="../css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
             <!-- Jquery file -->
-            <script src="../js/jquery.js"></script
+            <script src="../js/jquery.js"></script>
             <script src="../js/jquery-ui.js"></script>
             <script src="../js/bootstrap.min.js"> </script>
             <script src="../js/jquery.validate.js"> </script>
@@ -79,6 +83,22 @@
                 </div>
 
             </div>
+
+            <!-- modal de login -->
+            <div id="modalLogin" class="modal fade" tabindex="-1" role="dialog" style="top:25%;">
+              <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+
+                  <div class="modal-body">
+                    <p>
+                        <i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>
+                    </p>
+                    <p>Validando dados.</p>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
 
         </body>
 

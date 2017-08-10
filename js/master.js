@@ -14,17 +14,17 @@ $().ready(function() {
         //swal('testes');
         // validate signup form on keyup and submit
     	$("#questionario_cliente").validate({
-            rules: {
+          rules: {
                 nomeCliente: {
-                        required: true
-    			},
-                numeroServico: {
-                        required: true
-    			},
-                emailEnd: {
-                        email: true,
-                        required: true
-    			}
+                      required: true
+          			},
+                      numeroServico: {
+                              required: true
+          			},
+                      emailEnd: {
+                              email: true,
+                              required: true
+          			}
             },
             messages: {
                 nomeCliente: {
@@ -87,7 +87,6 @@ $().ready(function() {
     });
 
     //INICIA PROCESSO DE LOGIN
-
     $('#btnenviar').click(function() {
 
 
@@ -119,6 +118,8 @@ $().ready(function() {
             var acessoPessoal   = $('#pessoaAcesso').val();
             var senhaAcesso     = $('#senhaAcesso').val();
 
+            $('#modalLogin').modal();
+
             $.ajax({
                 url: urlP+"/login_sistema.php",
                 secureuri: false,
@@ -139,8 +140,9 @@ $().ready(function() {
                        }, 2000);
                    }else{
 
-                       swal('',datra.mensagem,'error');
-                       $('#detalhesAlarme').modal('hide');
+                      $('#modalLogin').modal('hide');
+                      
+                      swal('',datra.mensagem,'error');
                    }
 
                },
@@ -155,6 +157,43 @@ $().ready(function() {
 
         }
 
+
+    });
+
+
+    //BOTÃO DE LOGOUT
+    $('#saida').click(function(){
+
+      $.ajax({
+                url: urlP+"/login_sistema.php",
+                secureuri: false,
+                type : "POST",
+                dataType: 'json',
+                data      : {
+                  'saida'  : 1
+              },
+              success : function(datra)
+               {
+                   if(datra.status){
+                       //swal('','Tratamento registrado, verifica o estado do equipamento para confirmar a resolução do alarme', 'info');
+
+                       setTimeout(function(){
+                           //location.reload();
+                           window.location="login.php";
+                       }, 2000);
+                   }else{
+
+                      swal('',datra.mensagem,'error');
+                   }
+
+               },
+              error: function(jqXHR, textStatus, errorThrown)
+              {
+                // Handle errors here
+                console.log('ERRORS: ' + textStatus +" "+errorThrown+" "+jqXHR);
+                // STOP LOADING SPINNER
+              }
+            });
 
     });
 
@@ -247,10 +286,10 @@ $().ready(function() {
                      if(datra.status){
                          swal('Obrigado!',datra.mensagem, 'info');
 
-                        //  setTimeout(function(){
-                        //      //location.reload();
-                        //      window.location="index.php";
-                        //  }, 2000);
+                         setTimeout(function(){
+                             //location.reload();
+                             window.location="resposta.php?agradecimento=1";
+                         }, 2000);
                      }else{
 
                          swal('',datra.mensagem,'error');
@@ -268,10 +307,95 @@ $().ready(function() {
         }
 
     });
+  
+
+    //Inicia o processo de exportar dados pelo período solicitado
+    $('#exportarPeriodo').click(function(){
+
+      //valida as datas escolhidas
+        $('#formPeriodoExportar').validate({
+            rules: {
+                data_fim_csv : {
+                    required : true,
+                    greaterThan : "#data_inicio_csv"
+                },
+                data_inicio_csv : {
+                    required : true
+                }
+            },
+            messages: {
+                data_fim_csv : {
+                    required : "Campo obrigatório",
+                    greaterThan : "Data de inicío deve ser menor que a data final"
+                },
+                data_inicio_csv : {
+                    required : "Campo obrigatório"
+                }
+            }
+
+        });
+
+        if($('#formPeriodoExportar').valid()){
+
+          var inicio_csv  = $('#data_inicio_csv').val();
+          var final_csv   = $('#data_fim_csv').val();
+
+          $('#mensagemModal').html('Carregando dados');
+
+          $('#modalDados').modal();
+
+          document.location.href = '/pesquisa_periodo.php?relatorio_inicio_csv='+inicio_csv+'&relatorio_fim_csv='+final_csv;
+
+          $('#modalDados').modal('hide');
+
+
+          //Trecho comentado por ser mais prático enviar a requisição direto para o PHP do que enviar por AJAX
+          // $.ajax({
+          //       url: urlP+"/pesquisa_periodo.php",
+          //       secureuri: false,
+          //       type : "GET",
+          //       dataType: 'json',
+          //       data      : {
+          //           'relatorio_inicio_csv' : inicio_csv,
+          //           'relatorio_fim_csv' : final_csv
+          //       },
+          //       success : function(datra)
+          //       {
+
+
+
+          //         if(datra.status){
+
+          //           $('#modalDados').modal('hide');
+
+          //           //window.open('https://YOUR_URL','_blank' );
+          //           document.location.href = '/pesquisa_periodo.php?relatorio_inicio_csv='+inicio_csv+'&relatorio_fim_csv='+final_csv;
+          //           swal('',datra.mensagem,'success');
+
+
+          //         }else{
+
+          //           $('#modalDados').modal('hide');
+
+          //           swal('',datra.mensagem,'error');
+
+          //         }
+
+          //       },
+          //       error: function(jqXHR, textStatus, errorThrown)
+          //       {
+          //         // Handle errors here
+          //         console.log('ERRORS: ' + textStatus +" "+errorThrown+" "+jqXHR);
+          //         // STOP LOADING SPINNER
+          //       }
+          // });
+
+        }
+
+    });
 
 
     //Efetua a requisição dos dados de determinado
-
     $('#pesquisarPeriodo').click(function(){
 
         //valida as datas escolhidas
@@ -302,6 +426,10 @@ $().ready(function() {
             var inicio_rel  = $('#data_inicio_rel').val();
             var final_rel  = $('#data_fim_rel').val();
 
+            $('#mensagemModal').html('Carregando dados');
+
+            $('#modalDados').modal();
+
             //swal('','Teste','info');
             $.ajax({
                 url: urlP+"/pesquisa_periodo.php",
@@ -315,15 +443,87 @@ $().ready(function() {
                 success : function(datra)
                 {
                      if(datra.status){
-                         swal('Obrigado!',datra.mensagem, 'info');
+                        //swal('Obrigado!',datra.mensagem, 'info');
+                        $('#modalDados').modal('hide');
 
-                        //  setTimeout(function(){
-                        //      //location.reload();
-                        //      window.location="index.php";
-                        //  }, 2000);
+                        var data = datra.recomendacao;
+                        //alreadyFetched = {}
+
+                        var novData = [ ["0", data[0]],
+                                     ["1",  data[1]],
+                                     ["2",  data[2]],
+                                     ["3",  data[3]],
+                                     ["4",  data[4]],
+                                     ["5",  data[5]],
+                                     ["6",  data[6]],
+                                     ["7",  data[7]],
+                                     ["8",  data[8]],
+                                     ["9",  data[9]],
+                                     ["10", data[10]],
+                                 ];
+
+                        $.plot("#placeholder",[novData], {
+                            series: {
+                                bars: {
+                                    show: true,
+                                    barWidth: 0.6,
+                                    align: "center"
+                                }
+                            },
+                            xaxis: {
+                                mode: "categories",
+                                tickLength: 1
+                            },
+                            yaxis: {
+                                minTickSize: 1,
+                                tickDecimals: 0
+                            }
+                        });
+
+                        // identificar_tecnico
+                        $('#identificar_tecnicoA').val(datra.identificar_tecnicoA +'%');
+                        $('#identificar_tecnicoB').val(datra.identificar_tecnicoB +'%');
+                        $('#identificar_tecnicoC').val(datra.identificar_tecnicoC +'%');
+                        $('#identificar_tecnicoD').val(datra.identificar_tecnicoD +'%');
+
+                        // aparencia_tecnico
+                        $('#aparencia_tecnicoA').val(datra.aparencia_tecnicoA +'%');
+                        $('#aparencia_tecnicoB').val(datra.aparencia_tecnicoB +'%');
+                        $('#aparencia_tecnicoC').val(datra.aparencia_tecnicoC +'%');
+                        $('#aparencia_tecnicoD').val(datra.aparencia_tecnicoD +'%');
+
+                        // cordialidade
+                        $('#cordialidadeA').val(datra.cordialidadeA +'%');
+                        $('#cordialidadeB').val(datra.cordialidadeB +'%');
+                        $('#cordialidadeC').val(datra.cordialidadeC +'%');
+                        $('#cordialidadeD').val(datra.cordialidadeD +'%');
+
+                        // tempo_servico
+                        $('#tempo_servicoA').val(datra.tempo_servicoA +'%');
+                        $('#tempo_servicoB').val(datra.tempo_servicoB +'%');
+                        $('#tempo_servicoC').val(datra.tempo_servicoC +'%');
+                        $('#tempo_servicoD').val(datra.tempo_servicoD +'%');
+
+                        // agravante
+                        $('#agravanteA').val(datra.agravanteA +'%');
+                        $('#agravanteB').val(datra.agravanteA +'%');
+                        $('#agravanteC').val(datra.agravanteA +'%');
+                        $('#agravanteD').val(datra.agravanteA +'%');
+
+                        // expectativa
+                        $('#expectativaA').val(datra.expectativaA +'%');
+                        $('#expectativaB').val(datra.expectativaB +'%');
+                        $('#expectativaC').val(datra.expectativaC +'%');
+                        $('#expectativaD').val(datra.expectativaD +'%');
+
+                        // Data do périodo
+                        $('#dataInicio').html(" "+inicio_rel+" ");
+                        $('#dataFinal').html(" "+final_rel+" ");
+
                      }else{
 
-                         swal('',datra.mensagem,'error');
+                         $('#modalDados').modal('hide');
+                        swal('',datra.mensagem,'error');
                      }
 
                 },

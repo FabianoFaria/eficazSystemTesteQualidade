@@ -47,7 +47,60 @@
 
         //var_dump($usuarioDados);
 
-    }else{
+    }elseif(isset($_POST['saida'])){
+
+        //Simples destruição da sessão
+        session_start() ;
+        session_destroy() ;
+
+
+        exit(json_encode(array('status' => true, 'mensagem' => 'Logout efetuado!')));
+
+    }
+    elseif(isset($_POST['novoUsuario']) && isset($_POST['novoEmail'])){
+
+        //CADASTRO DE NOVO USUÁRIO
+
+        $novoUsuario    = $_POST['novoUsuario'];
+        $email_novo     = $_POST['novoEmail'];
+        $senhaNova      = $_POST['novaSenha'];
+        $confirmaSenha  = $_POST['confirmaSenha'];
+
+
+    }
+    elseif(isset($_POST['email_teste'])){
+
+        // VERIFICAÇÂO DO SISTEMA SE O EMAIL DO NOVO USUÁRIO JÁ ESTÁ EM USO
+
+        $email_teste = $_POST['email_teste'];
+
+        require_once "classes/conexao.php";
+
+        $conn = new BancoDeDados;
+
+        $db = $conn->conexao();
+
+
+        // prepare and bind
+        $stmt = $db->prepare("SELECT email_usuario FROM tb_sistema_usuarios WHERE email_usuario = :email AND status = '1'");
+
+        $stmt->execute(array(':email' => $email_teste));
+        $usuarioDados = $stmt->fetchAll();
+
+        if(!empty($usuarioDados)){
+
+            // false DE EXISTENTE, LOGO IMPROPIO PARA SEGUIR
+            echo json_encode(false);
+
+        }else{
+
+            //TRUE DE NÚMERO SIM NÃO EXISTENTE, CADASTRO PODE SEGUIR
+            echo json_encode(true);
+
+        }
+
+    }
+    else{
 
         exit(json_encode(array('status' => false, 'mensagem' => 'Erro de tentativa de login!')));
 

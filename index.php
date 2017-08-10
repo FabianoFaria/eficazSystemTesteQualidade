@@ -4,7 +4,7 @@
     session_start();
 
     // Verifica se esta na sessao
-    if (!isset($_SESSION['userdata']))
+    if(!isset($_SESSION['userdata']))
     {
         // Se nao estiver
         // Remove qualquer dado existente
@@ -33,9 +33,12 @@
 
     }else{
 
+        $page = 'indice';
+
+        include 'menu_inicial.php';
 ?>
 
-<html>
+<!-- <html>
 <head>
 
     <meta charset="utf-8">
@@ -46,38 +49,40 @@
 
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../imagens/favicon2.ico">
+    <link rel="icon" href="../imagens/favicon2.ico"> -->
 
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="../css/sweetalert.css" rel="stylesheet" type="text/css">
+    <!-- <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/sweetalert.css" rel="stylesheet" type="text/css"> -->
 
     <!-- Custom styles for this template -->
-    <link href="../css/master.css" rel="stylesheet" type="text/css">
+    <!-- <link href="../css/master.css" rel="stylesheet" type="text/css"> -->
 
     <!-- Jquery file -->
-    <script src="../js/jquery.js"></script>
+  <!--   <script src="../js/jquery.js"></script>
     <script src="../js/master.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/jquery.validate.js"></script>
     <script src="../js/sweetalert.min.js"></script>
 
-
 </head>
 <body>
 
-    <div class="container">
-        <div class="header clearfix">
+    <div class="container"> -->
+        <!-- Inicio da parte do menu -->
+        <!-- <div class="header clearfix">
             <nav>
               <ul class="nav nav-pills pull-right">
                 <li role="presentation" class="active"><a href="javascript:void(0)">Enviar avaliação</a></li>
                  <li role="presentation"><a href="visualizacao_dados.php">Vizualizar dados</a></li>
-                <!--<li role="presentation"><a href="#">Contact</a></li> -->
+                <li role="presentation"><a href="javascript:void(0)" id="saida">Sair</a></li> 
               </ul>
-            </nav>
+            </nav> -->
             <!-- <h3 class="text-muted">Eficaz System - Questionario de qualidade</h3> -->
-             <a href="#"><img src="imagens/logo-eficaz-system_small.png" class="img-responsive"></a>
-        </div>
+             <!-- <a href="#"><img src="imagens/logo-eficaz-system_small.png" class="img-responsive"></a>
+        </div> -->
+        <!-- Fim da parte do menu -->
+
 
         <div class="jumbotron">
            <h2>Enviar questionario de qualidade.</h2>
@@ -114,16 +119,19 @@
         </div>
 
 
-        <footer class="footer">
-            <p class="">© <?php echo date('Y'); ?> Eficaz system - Sistema de avaliação de qualidade.</p>
+<!--         <footer class="footer">
+            <p class="">© <?php //echo date('Y'); ?> Eficaz system - Sistema de avaliação de qualidade.</p>
         </footer>
 
-    </div> <!-- /container -->
+    </div>  /container 
 
 </body>
-</html>
+</html> -->
 
 <?php
+    
+    include 'footer.php';
+    
 
     }
 
